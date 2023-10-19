@@ -1,25 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
-function App() {
+const ActoresGame = () => {
+
+  const[actores, setListadosActores] = useState([]);
+
+  useEffect(() => {
+
+    const obtenerPersonajes =  async () => {
+
+      const url = 'https://thronesapi.com/api/v2/Characters';
+      const result = await axios.get(url);
+
+      //console.log(result.data);
+
+      setListadosActores(result.data)
+
+    }
+    obtenerPersonajes()
+
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+    <h1>Actores Game Of Thrones</h1>
+    <ul>
+      {actores.length === 0 && <p>Cargando...</p>}
+      {
+        actores.map((personas, i) => {
+          return i < 10 ?(
+            <li key={i}>
+              <h4>Nombre: {personas.fullName}</h4>
+              <img src={personas.imageUrl} alt="img" width='200'/>
+              <h5>{personas.family}</h5>
+
+            </li>
+          ) : null
+        })
+      }
+    </ul>
     </div>
-  );
+  )
 }
 
-export default App;
+export default ActoresGame
